@@ -35,6 +35,14 @@ module.exports = {
             orderCode: {
                 type: Sequelize.STRING,
                 isNull: false
+            },
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE
             }
         });
     },
