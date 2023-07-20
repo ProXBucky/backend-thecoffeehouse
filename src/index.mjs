@@ -4,12 +4,14 @@ import viewConfig from "./config/viewEngine.mjs"
 import bodyParser from 'body-parser'
 import dotenv from "dotenv"
 import initWebRoutes from './routes/route.cjs'
+import cors from "cors"
 dotenv.config()
 
 
 let app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, }));
+app.use(cors())
 initWebRoutes(app)
 viewConfig(app)
 connectDB()

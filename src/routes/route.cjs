@@ -7,10 +7,14 @@ const router = express.Router()
 function initWebRoutes(app) {
     router.get('/', userController.getHome)
     router.get('/page', userController.getPage)
+    router.post('/api/create-new-admin', userController.createNewAdmin)
+    router.post('/api/login-admin', userController.loginAdmin)
 
 
-    router.post('/api/create-new-admin', adminController.createNewAdmin)
+
     router.get('/api/get-all-admin', adminController.getAllAdmin)
+    router.delete('/api/delete-admin', adminController.deleteAdmin)
+    router.put('/api/update-admin-data', adminController.updateAdminData)
 
     return app.use("/", router);
 }
