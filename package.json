@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src/index.mjs -d dist",
-    "start": "npm run build && nodemon src/index.mjs"
+    "start": "npm run build && nodemon src/index.mjs",
+    "dev": "npm start && nodemon --ext * js,html,ejs,css,scss"
   },
   "author": "ProXBucky",
   "license": "ISC",
@@ -28,7 +29,9 @@
     "@babel/core": "^7.22.9",
     "@babel/eslint-parser": "^7.22.9",
     "@babel/preset-env": "^7.22.9",
+    "connect-livereload": "^0.6.1",
     "eslint": "^8.45.0",
+    "livereload": "^0.9.3",
     "nodemon": "^3.0.1"
   }
 }

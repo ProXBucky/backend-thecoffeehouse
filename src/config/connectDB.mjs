@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize";
 const sequelize = new Sequelize('thecoffeehouse', 'root', '', {
     host: 'localhost',
     dialect: "mysql",
-    logging: false
+    logging: false,
 });
 
 let connectDB = async () => {

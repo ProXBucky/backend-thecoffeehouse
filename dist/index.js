@@ -6,10 +6,24 @@ var _viewEngine = _interopRequireDefault(require("./config/viewEngine.mjs"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _route = _interopRequireDefault(require("./routes/route.cjs"));
+var _livereload = _interopRequireDefault(require("livereload"));
+var _connectLivereload = _interopRequireDefault(require("connect-livereload"));
 var _cors = _interopRequireDefault(require("cors"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 _dotenv.default.config();
+
+//auto load server when optimize
+const liveReloadServer = _livereload.default.createServer();
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
 let app = (0, _express.default)();
+const env = process.env.NODE_ENV || "development";
+if (env === "development") {
+  app.use((0, _connectLivereload.default)());
+}
 app.use(_bodyParser.default.json());
 app.use(_bodyParser.default.urlencoded({
   extended: true

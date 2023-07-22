@@ -13,6 +13,7 @@ function initWebRoutes(app) {
 
 
     router.get('/api/get-all-admin', adminController.getAllAdmin)
+    router.get('/api/get-admin-by-id', adminController.getAdminById)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
 

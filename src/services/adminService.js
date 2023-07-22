@@ -15,7 +15,7 @@ let getAllAdminService = () => {
             resolve({
                 errCode: 0,
                 errMessage: 'Get all admin success',
-                data: allAdmin
+                data: allAdmin.reverse()
             })
         } catch (e) {
             console.log(e)
@@ -24,13 +24,37 @@ let getAllAdminService = () => {
     })
 }
 
+let getAdminByIdService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.Users.findOne({
+                where: { id: id }
+            })
+            if (user) {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Get admin data success",
+                    data: user
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Data is not found"
+                })
+            }
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 let deleteAdminService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const userDelete = await db.Users.findOne({
-                where: { id: id }
-            })
-            await userDelete.destroy();
+            await db.Users.destroy({
+                where: {id : id}
+              });
             resolve({
                 errCode: 0,
                 errMessage: 'Delete admin success'
@@ -73,4 +97,4 @@ let updateAdminDataService = (body) => {
     })
 }
 
-module.exports = { getAllAdminService, deleteAdminService, updateAdminDataService }
+module.exports = { getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService }
