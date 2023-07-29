@@ -13,14 +13,14 @@ let getPage = (req, res) => {
 }
 
 let createNewAdmin = async (req, res) => {
-    let respone = await userService.createNewAdminService(req.body)
-    return res.status(200).json(respone)
+    let response = await userService.createNewAdminService(req.body)
+    return res.status(200).json(response)
 }
 
 let loginAdmin = async (req, res) => {
     try {
-        let respone = await userService.loginAdminService(req.body)
-        return res.status(200).json(respone)
+        let response = await userService.loginAdminService(req.body)
+        return res.status(200).json(response)
     } catch (e) {
         console.log(e);
         return res.status(200).json({

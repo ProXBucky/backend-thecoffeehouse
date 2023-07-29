@@ -9,6 +9,8 @@ var _route = _interopRequireDefault(require("./routes/route.cjs"));
 var _livereload = _interopRequireDefault(require("livereload"));
 var _connectLivereload = _interopRequireDefault(require("connect-livereload"));
 var _cors = _interopRequireDefault(require("cors"));
+var _expressSession = _interopRequireDefault(require("express-session"));
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 _dotenv.default.config();
 
@@ -32,6 +34,26 @@ app.use((0, _cors.default)());
 (0, _route.default)(app);
 (0, _viewEngine.default)(app);
 (0, _connectDB.default)();
+
+// app.use(session({ secret: "fingerprint", resave: true, saveUninitialized: true }))
+
+// app.use("/system", (req, res, next) => {
+//     if (req.session.authorization) {
+//         let token = req.session.authorization['accessToken'];
+//         jwt.verify(token, "access", (err, user) => {
+//             if (!err) {
+//                 req.user = user;
+//                 next();
+//             }
+//             else {
+//                 return res.status(403).json({ message: "User not authenticated" })
+//             }
+//         });
+//     } else {
+//         return res.status(403).json({ message: "User not logged in" })
+//     }
+// });
+
 let port = process.env.PORT || 4000;
 app.listen(port, () => {
   console.log(`Backend is running in port http://localhost:${port}`);

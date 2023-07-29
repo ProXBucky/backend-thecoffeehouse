@@ -49,12 +49,38 @@ let getAdminByIdService = (id) => {
     })
 }
 
+let getAdminByEmailService = (email) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let user = await db.Users.findOne({
+                where: { email: email },
+                attributes: { exclude: ['password'] }
+            })
+            if (user) {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Get admin data success",
+                    data: user
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Data is not found"
+                })
+            }
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 let deleteAdminService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             await db.Users.destroy({
-                where: {id : id}
-              });
+                where: { id: id }
+            });
             resolve({
                 errCode: 0,
                 errMessage: 'Delete admin success'
@@ -97,4 +123,4 @@ let updateAdminDataService = (body) => {
     })
 }
 
-module.exports = { getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService }
+module.exports = { getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService }

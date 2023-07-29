@@ -39,24 +39,24 @@ initWebRoutes(app)
 viewConfig(app)
 connectDB()
 
-// app.use(session({ secret: "fingerprint", resave: true, saveUninitialized: true }))
+app.use(session({ secret: "fingerprint", resave: true, saveUninitialized: true }))
 
-// app.use("/system", (req, res, next) => {
-//     if (req.session.authorization) {
-//         let token = req.session.authorization['accessToken'];
-//         jwt.verify(token, "access", (err, user) => {
-//             if (!err) {
-//                 req.user = user;
-//                 next();
-//             }
-//             else {
-//                 return res.status(403).json({ message: "User not authenticated" })
-//             }
-//         });
-//     } else {
-//         return res.status(403).json({ message: "User not logged in" })
-//     }
-// });
+app.use("/system", (req, res, next) => {
+    if (req.session.authorization) {
+        let token = req.session.authorization['accessToken'];
+        jwt.verify(token, "access", (err, user) => {
+            if (!err) {
+                req.user = user;
+                next();
+            }
+            else {
+                return res.status(403).json({ message: "User not authenticated" })
+            }
+        });
+    } else {
+        return res.status(403).json({ message: "User not logged in" })
+    }
+});
 
 
 let port = process.env.PORT || 4000

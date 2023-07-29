@@ -1,6 +1,7 @@
 const express = require('express')
 const userController = require("../controllers/userController.js")
 const adminController = require("../controllers/adminController.js")
+const appController = require("../controllers/appController.js")
 
 const router = express.Router()
 
@@ -10,12 +11,13 @@ function initWebRoutes(app) {
     router.post('/api/create-new-admin', userController.createNewAdmin)
     router.post('/api/login-admin', userController.loginAdmin)
 
-
-
     router.get('/api/get-all-admin', adminController.getAllAdmin)
     router.get('/api/get-admin-by-id', adminController.getAdminById)
+    router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
+
+    router.get('/api/get-allcode-by-type', appController.getAllCodeByType)
 
     return app.use("/", router);
 }
