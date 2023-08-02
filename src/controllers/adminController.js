@@ -6,7 +6,7 @@ let getAllAdmin = async (req, res) => {
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
-        return res.status(200).json({
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
@@ -19,7 +19,7 @@ let getAdminById = async (req, res) => {
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
-        return res.status(200).json({
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
@@ -33,7 +33,7 @@ let deleteAdmin = async (req, res) => {
 
     } catch (e) {
         console.log(e);
-        return res.status(200).json({
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
@@ -46,7 +46,7 @@ let updateAdminData = async (req, res) => {
         return res.status(200).json(response)
     } catch (e) {
         console.log(e)
-        return res.status(200).json({
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
@@ -60,7 +60,47 @@ let getAdminByEmail = async (req, res) => {
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
-        return res.status(200).json({
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let createNewProduct = async (req, res) => {
+    try {
+        const response = await adminService.createNewProductSevice(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let deleteProduct = async (req, res) => {
+    try {
+        let response = await adminService.deleteProductService(req.query.id)
+        return res.status(200).json(response)
+
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let updateProductData = async (req, res) => {
+    try {
+        let response = await adminService.updateProductDataService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error from server'
         })
@@ -68,4 +108,4 @@ let getAdminByEmail = async (req, res) => {
 }
 
 
-module.exports = { getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail }
+module.exports = { getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail, createNewProduct, deleteProduct, updateProductData }

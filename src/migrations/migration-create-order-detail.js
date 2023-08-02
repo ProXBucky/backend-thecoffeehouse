@@ -19,9 +19,11 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 isNull: false
             },
-            pricePerProduct: {
-                type: Sequelize.INTEGER,
-                isNull: false
+            quantity: {
+                type: Sequelize.INTEGER
+            },
+            price: {
+                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,

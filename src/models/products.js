@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Products.belongsTo(models.Allcodes, { foreignKey: 'category', targetKey: 'keyMap', as: 'categoryData' })
         }
     }
     Products.init({
@@ -22,8 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         size: DataTypes.STRING,
         image: DataTypes.BLOB('long'),
         originalPrice: DataTypes.INTEGER,
-        quantity: DataTypes.INTEGER,
-        price: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Products',

@@ -123,4 +123,76 @@ let updateAdminDataService = (body) => {
     })
 }
 
-module.exports = { getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService }
+let createNewProductSevice = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Products.create({
+                name: body.name,
+                originalPrice: body.originalPrice,
+                category: body.category,
+                size: body.size,
+                image: body.image,
+                description: body.description
+            })
+            resolve({
+                errCode: 0,
+                errMessage: "Create product success"
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let deleteProductService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Products.destroy({
+                where: { id: id }
+            });
+            resolve({
+                errCode: 0,
+                errMessage: 'Delete product success'
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let updateProductDataService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const productUpdate = await db.Products.findOne({
+                where: { id: body.id }
+            })
+            if (productUpdate) {
+                productUpdate.name = body.name
+                productUpdate.description = body.description
+                productUpdate.category = body.category
+                productUpdate.size = body.size
+                productUpdate.image = body.image
+                productUpdate.originalPrice = body.originalPrice
+                await productUpdate.save();
+                resolve({
+                    errCode: 0,
+                    errMessage: "Update data success"
+                })
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'User not found'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+module.exports = {
+    getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
+    deleteProductService, updateProductDataService
+}

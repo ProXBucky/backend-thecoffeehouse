@@ -16,8 +16,12 @@ function initWebRoutes(app) {
     router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
+    router.post('/api/create-new-product', adminController.createNewProduct)
+    router.delete('/api/delete-product', adminController.deleteProduct)
+    router.put('/api/update-product-data', adminController.updateProductData)
 
     router.get('/api/get-allcode-by-type', appController.getAllCodeByType)
+    router.get('/api/get-all-product-by-category', appController.getAllProductByCategory)
 
     return app.use("/", router);
 }

@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Allcodes.hasOne(models.Products, { foreignKey: 'category', as: 'categoryData', });
         }
     }
     Allcodes.init({
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         keyMap: DataTypes.STRING,
         valueEn: DataTypes.STRING,
         valueVn: DataTypes.STRING,
+
     }, {
         sequelize,
         modelName: 'Allcodes',
