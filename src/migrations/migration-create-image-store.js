@@ -3,27 +3,20 @@
 
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Stores', {
+        await queryInterface.createTable('ImageStore', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            nameStore: {
-                type: Sequelize.STRING
+            storeCode: {
+                type: Sequelize.UUID,
+                isNull: false
             },
-            address: {
-                type: Sequelize.STRING
-            },
-            description: {
-                type: Sequelize.TEXT
-            },
-            cityId: {
-                type: Sequelize.STRING
-            },
-            storeId: {
-                type: Sequelize.UUID
+            image: {
+                type: Sequelize.BLOB('long'),
+                isNull: false
             },
             createdAt: {
                 allowNull: false,
@@ -36,6 +29,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Stores');
+        await queryInterface.dropTable('ImageStore');
     }
 };

@@ -107,5 +107,35 @@ let updateProductData = async (req, res) => {
     }
 }
 
+let createNewStore = async (req, res) => {
+    try {
+        const response = await adminService.createNewStoreService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
 
-module.exports = { getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail, createNewProduct, deleteProduct, updateProductData }
+let uploadMultiImage = async (req, res) => {
+    try {
+        const response = await adminService.uploadMultiImageService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+
+
+module.exports = {
+    getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail, createNewProduct, deleteProduct, updateProductData,
+    createNewStore, uploadMultiImage
+}

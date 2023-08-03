@@ -34,16 +34,25 @@ let getAllProductByCategoryService = (category) => {
                     // attributes: {
                     //     exclude: ['image'],
                     // },
-                    include: [{ model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }],
-                })
 
+                    include: [
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                        { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                    ],
+                    order: [
+                        ['category', 'DESC'],
+                    ],
+                })
             } else {
                 productArr = await db.Products.findAll({
                     where: { category: category },
                     // attributes: {
                     //     exclude: ['image'],
                     // },
-                    include: [{ model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }],
+                    include: [
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                        { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                    ],
                 })
             }
             if (productArr.length > 0) {
@@ -64,4 +73,49 @@ let getAllProductByCategoryService = (category) => {
     })
 }
 
-module.exports = { getAllCodeByTypeService, getAllProductByCategoryService } 
+let getAllStoreByCityService = (city) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let productArr = []
+            if (city === 'ALL') {
+                productArr = await db.Stores.findAll({
+                    // attributes: {
+                    //     exclude: ['image'],
+                    // },
+
+                    // include: [
+                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    //     { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                    // ],
+                })
+            } else {
+                productArr = await db.Stores.findAll({
+                    where: { cityId: city },
+                    // attributes: {
+                    //     exclude: ['image'],
+                    // },
+                    // include: [
+                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    //     { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                    // ],
+                })
+            }
+            if (productArr.length > 0) {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Fetch data success",
+                    data: productArr.reverse()
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Fetch data fail"
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService } 

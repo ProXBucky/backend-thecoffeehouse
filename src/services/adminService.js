@@ -126,6 +126,12 @@ let updateAdminDataService = (body) => {
 let createNewProductSevice = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!body) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter'
+                })
+            }
             await db.Products.create({
                 name: body.name,
                 originalPrice: body.originalPrice,
@@ -192,7 +198,42 @@ let updateProductDataService = (body) => {
     })
 }
 
+let createNewStoreService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Stores.create({
+                nameStore: body.nameStore,
+                address: body.address,
+                cityId: body.cityId,
+                description: body.description,
+                storeId: body.storeId
+            })
+            resolve({
+                errCode: 0,
+                errMessage: "Create product success"
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let uploadMultiImageService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.ImageStore.bulkCreate(body)
+            resolve({
+                errCode: 0,
+                errMessage: "Upload store's images success"
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
 module.exports = {
     getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
-    deleteProductService, updateProductDataService
+    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService
 }

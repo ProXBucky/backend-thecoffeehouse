@@ -20,8 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         address: DataTypes.STRING,
         description: DataTypes.TEXT,
         cityId: DataTypes.STRING,
-        image: DataTypes.BLOB('long'),
-        timeOpen: DataTypes.INTEGER
+        storeId: DataTypes.UUID,
     }, {
         sequelize,
         modelName: 'Stores',

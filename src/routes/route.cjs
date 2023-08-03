@@ -19,9 +19,15 @@ function initWebRoutes(app) {
     router.post('/api/create-new-product', adminController.createNewProduct)
     router.delete('/api/delete-product', adminController.deleteProduct)
     router.put('/api/update-product-data', adminController.updateProductData)
+    // thieu edit product
+
+    router.post('/api/create-new-store', adminController.createNewStore)
+    router.post('/api/upload-multi-image-store', adminController.uploadMultiImage)
+
 
     router.get('/api/get-allcode-by-type', appController.getAllCodeByType)
     router.get('/api/get-all-product-by-category', appController.getAllProductByCategory)
+    router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
 
     return app.use("/", router);
 }

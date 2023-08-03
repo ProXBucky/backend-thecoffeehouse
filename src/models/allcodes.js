@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Allcodes.hasOne(models.Products, { foreignKey: 'category', as: 'categoryData', });
+            Allcodes.hasOne(models.Products, { foreignKey: 'category', as: 'categoryData' });
+            Allcodes.hasOne(models.Products, { foreignKey: 'size', as: 'sizeData' });
         }
     }
     Allcodes.init({
