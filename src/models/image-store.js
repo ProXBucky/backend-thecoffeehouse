@@ -2,7 +2,7 @@
 const {
     Model
 } = require('sequelize');
-// import { Model } from "sequelize";
+
 
 module.exports = (sequelize, DataTypes) => {
     class ImageStore extends Model {
@@ -13,11 +13,12 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            ImageStore.belongsTo(models.Stores, { foreignKey: 'storeId', as: 'storeData' })
 
         }
     }
     ImageStore.init({
-        storeCode: DataTypes.UUID,
+        storeId: DataTypes.STRING,
         image: DataTypes.BLOB('long'),
     }, {
         sequelize,

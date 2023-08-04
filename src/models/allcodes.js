@@ -12,8 +12,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Allcodes.hasOne(models.Products, { foreignKey: 'category', as: 'categoryData' });
-            Allcodes.hasOne(models.Products, { foreignKey: 'size', as: 'sizeData' });
+            Allcodes.hasMany(models.Products, { foreignKey: 'category', as: 'categoryData' });
+            Allcodes.hasMany(models.Products, { foreignKey: 'size', as: 'sizeData' });
+            Allcodes.hasMany(models.Stores, { foreignKey: 'cityId', as: 'cityData' });
         }
     }
     Allcodes.init({

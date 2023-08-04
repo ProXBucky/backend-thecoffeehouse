@@ -31,10 +31,6 @@ let getAllProductByCategoryService = (category) => {
             let productArr = []
             if (category === 'ALL') {
                 productArr = await db.Products.findAll({
-                    // attributes: {
-                    //     exclude: ['image'],
-                    // },
-
                     include: [
                         { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
                         { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
@@ -46,9 +42,6 @@ let getAllProductByCategoryService = (category) => {
             } else {
                 productArr = await db.Products.findAll({
                     where: { category: category },
-                    // attributes: {
-                    //     exclude: ['image'],
-                    // },
                     include: [
                         { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
                         { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
@@ -76,35 +69,29 @@ let getAllProductByCategoryService = (category) => {
 let getAllStoreByCityService = (city) => {
     return new Promise(async (resolve, reject) => {
         try {
-            let productArr = []
+            let storeArr = []
             if (city === 'ALL') {
-                productArr = await db.Stores.findAll({
-                    // attributes: {
-                    //     exclude: ['image'],
-                    // },
-
-                    // include: [
-                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                    //     { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
-                    // ],
+                storeArr = await db.Stores.findAll({
+                    include: [
+                        { model: db.ImageStore, as: 'imageData' },
+                        { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                    ],
                 })
             } else {
                 productArr = await db.Stores.findAll({
-                    where: { cityId: city },
-                    // attributes: {
-                    //     exclude: ['image'],
-                    // },
-                    // include: [
-                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                    //     { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
-                    // ],
+                    where: { city: city },
+                    include: [
+                        { model: db.ImageStore, as: 'imageData' },
+                        { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                    ],
                 })
+
             }
-            if (productArr.length > 0) {
+            if (storeArr.length > 0) {
                 resolve({
                     errCode: 0,
                     errMessage: "Fetch data success",
-                    data: productArr.reverse()
+                    data: storeArr
                 })
             } else {
                 resolve({

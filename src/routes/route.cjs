@@ -11,18 +11,21 @@ function initWebRoutes(app) {
     router.post('/api/create-new-admin', userController.createNewAdmin)
     router.post('/api/login-admin', userController.loginAdmin)
 
+    //admin
     router.get('/api/get-all-admin', adminController.getAllAdmin)
     router.get('/api/get-admin-by-id', adminController.getAdminById)
     router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
+    //product
     router.post('/api/create-new-product', adminController.createNewProduct)
     router.delete('/api/delete-product', adminController.deleteProduct)
     router.put('/api/update-product-data', adminController.updateProductData)
-    // thieu edit product
-
+    //store
     router.post('/api/create-new-store', adminController.createNewStore)
     router.post('/api/upload-multi-image-store', adminController.uploadMultiImage)
+    router.delete('/api/delete-store', adminController.deleteStore)
+    router.put('/api/update-store-data', adminController.updateStoreData)
 
 
     router.get('/api/get-allcode-by-type', appController.getAllCodeByType)

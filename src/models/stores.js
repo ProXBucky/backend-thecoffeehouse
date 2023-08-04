@@ -2,7 +2,7 @@
 const {
     Model
 } = require('sequelize');
-// import { Model } from "sequelize";
+
 
 module.exports = (sequelize, DataTypes) => {
     class Stores extends Model {
@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Stores.hasMany(models.ImageStore, { foreignKey: 'storeId', as: 'imageData' })
+            Stores.belongsTo(models.Allcodes, { foreignKey: 'cityId', targetKey: 'keyMap', as: "cityData" })
         }
     }
     Stores.init({
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         address: DataTypes.STRING,
         description: DataTypes.TEXT,
         cityId: DataTypes.STRING,
-        storeId: DataTypes.UUID,
+        mapLink: DataTypes.TEXT,
     }, {
         sequelize,
         modelName: 'Stores',

@@ -202,11 +202,13 @@ let createNewStoreService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
             await db.Stores.create({
+                id: body.id,
                 nameStore: body.nameStore,
                 address: body.address,
                 cityId: body.cityId,
                 description: body.description,
-                storeId: body.storeId
+                storeId: body.storeId,
+                mapLink: body.mapLink
             })
             resolve({
                 errCode: 0,
@@ -232,8 +234,61 @@ let uploadMultiImageService = (body) => {
     })
 }
 
+let deleteStoreService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.Stores.destroy({
+                where: { id: id }
+            });
+            await db.ImageStore.destroy({
+                where: { storeId: id }
+            })
+            resolve({
+                errCode: 0,
+                errMessage: 'Delete product success'
+            })
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let updateStoreDataService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.ImageStore.destroy({
+                where: { storeId: body.id }
+            })
+            await uploadMultiImageService(body.image)
+            const storeUpdate = await db.Stores.findOne({
+                where: { id: body.id }
+            })
+            if (storeUpdate) {
+                storeUpdate.nameStore = body.nameStore
+                storeUpdate.address = body.address
+                storeUpdate.cityId = body.cityId
+                storeUpdate.description = body.description
+                storeUpdate.mapLink = body.mapLink
+                await storeUpdate.save();
+                resolve({
+                    errCode: 0,
+                    errMessage: "Update data success"
+                })
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'User not found'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 
 module.exports = {
     getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
-    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService
+    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService, updateStoreDataService, deleteStoreService
 }

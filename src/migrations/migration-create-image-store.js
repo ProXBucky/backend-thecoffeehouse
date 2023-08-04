@@ -10,8 +10,8 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            storeCode: {
-                type: Sequelize.UUID,
+            storeId: {
+                type: Sequelize.STRING,
                 isNull: false
             },
             image: {
