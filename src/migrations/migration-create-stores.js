@@ -23,6 +23,9 @@ module.exports = {
             mapLink: {
                 type: Sequelize.TEXT
             },
+            shortDescription: {
+                type: Sequelize.TEXT
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE

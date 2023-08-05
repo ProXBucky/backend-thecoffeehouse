@@ -207,6 +207,7 @@ let createNewStoreService = (body) => {
                 address: body.address,
                 cityId: body.cityId,
                 description: body.description,
+                shortDescription: body.shortDescription,
                 storeId: body.storeId,
                 mapLink: body.mapLink
             })
@@ -268,6 +269,7 @@ let updateStoreDataService = (body) => {
                 storeUpdate.address = body.address
                 storeUpdate.cityId = body.cityId
                 storeUpdate.description = body.description
+                storeUpdate.shortDescription = body.shortDescription
                 storeUpdate.mapLink = body.mapLink
                 await storeUpdate.save();
                 resolve({

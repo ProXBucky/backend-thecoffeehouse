@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         description: DataTypes.TEXT,
         cityId: DataTypes.STRING,
         mapLink: DataTypes.TEXT,
+        shortDescription: DataTypes.TEXT
     }, {
         sequelize,
         modelName: 'Stores',
