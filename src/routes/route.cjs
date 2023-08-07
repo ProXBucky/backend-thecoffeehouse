@@ -31,6 +31,7 @@ function initWebRoutes(app) {
     router.get('/api/get-allcode-by-type', appController.getAllCodeByType)
     router.get('/api/get-all-product-by-category', appController.getAllProductByCategory)
     router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
+    router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
 
     return app.use("/", router);
 }

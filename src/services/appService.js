@@ -78,8 +78,8 @@ let getAllStoreByCityService = (city) => {
                     ],
                 })
             } else {
-                productArr = await db.Stores.findAll({
-                    where: { city: city },
+                storeArr = await db.Stores.findAll({
+                    where: { cityId: city },
                     include: [
                         { model: db.ImageStore, as: 'imageData' },
                         { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
@@ -105,4 +105,39 @@ let getAllStoreByCityService = (city) => {
     })
 }
 
-module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService } 
+
+let getDetailProductByIdService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                })
+            } else {
+                const res = await db.Products.findOne({
+                    where: { id: id },
+                    include: [
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    ]
+                })
+                if (!res) {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'Product is not found'
+                    })
+                } else {
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Get data succsess',
+                        data: res
+                    })
+                }
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService } 
