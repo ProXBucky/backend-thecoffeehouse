@@ -140,4 +140,42 @@ let getDetailProductByIdService = (id) => {
     })
 }
 
-module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService } 
+let getDetailStoreByIdService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                })
+            } else {
+                const res = await db.Stores.findOne({
+                    where: { id: id },
+                    // include: [
+                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    // ]
+                })
+                const resImg = await db.ImageStore.findAll({
+                    where: { storeId: id }
+                })
+                if (!res || !resImg) {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'Product is not found'
+                    })
+                } else {
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Get data succsess',
+                        data: res,
+                        imgData: resImg
+                    })
+                }
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService } 

@@ -14,7 +14,7 @@ function initWebRoutes(app) {
     //admin
     router.get('/api/get-all-admin', adminController.getAllAdmin)
     router.get('/api/get-admin-by-id', adminController.getAdminById)
-    router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
+    // router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
     //product
@@ -32,6 +32,7 @@ function initWebRoutes(app) {
     router.get('/api/get-all-product-by-category', appController.getAllProductByCategory)
     router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
     router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
+    router.get('/api/get-detail-store-by-id', appController.getDetailStoreById)
 
     return app.use("/", router);
 }
