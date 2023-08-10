@@ -209,7 +209,8 @@ let createNewStoreService = (body) => {
                 description: body.description,
                 shortDescription: body.shortDescription,
                 storeId: body.storeId,
-                mapLink: body.mapLink
+                mapLink: body.mapLink,
+                mapHTML: body.mapHTML,
             })
             resolve({
                 errCode: 0,
@@ -271,6 +272,7 @@ let updateStoreDataService = (body) => {
                 storeUpdate.description = body.description
                 storeUpdate.shortDescription = body.shortDescription
                 storeUpdate.mapLink = body.mapLink
+                storeUpdate.mapHTML = body.mapHTML
                 await storeUpdate.save();
                 resolve({
                     errCode: 0,

@@ -33,6 +33,7 @@ function initWebRoutes(app) {
     router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
     router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
     router.get('/api/get-detail-store-by-id', appController.getDetailStoreById)
+    router.post('/api/order-product', appController.orderProduct)
 
     return app.use("/", router);
 }

@@ -1,4 +1,3 @@
-const { response } = require("express")
 const db = require("../models/index.js")
 
 let getAllCodeByTypeService = (type) => {
@@ -151,9 +150,6 @@ let getDetailStoreByIdService = (id) => {
             } else {
                 const res = await db.Stores.findOne({
                     where: { id: id },
-                    // include: [
-                    //     { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                    // ]
                 })
                 const resImg = await db.ImageStore.findAll({
                     where: { storeId: id }
@@ -178,4 +174,60 @@ let getDetailStoreByIdService = (id) => {
     })
 }
 
-module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService } 
+
+let orderProductService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (body.cart || body.cartItems || body.cartTotalAmount) {
+                const [user] = await db.Users.findOrCreate({
+                    where: { email: body.email },
+                    defaults: {
+                        email: body.email,
+                        firstName: body.firstName,
+                        lastName: body.lastName,
+                        phone: body.phone,
+                        address: body.address,
+                        roleId: 'R2'
+                    }
+                });
+
+                const order = await db.Orders.create({
+                    userId: user.id,
+                    totalPrice: body.cartTotalAmount,
+                    timeOrder: body.timeOrder,
+                    statusPayment: 'SP1'
+                })
+                if (order && order.id) {
+                    const productOrders = []
+                    await body.cartItems.map((item) => {
+                        productOrders.push({
+                            orderId: order.id,
+                            productId: item.id,
+                            quantity: item.cartQuantity,
+                            price: item.originalPrice
+                        })
+                    })
+
+                    const tmp = await db.OrderDetail.bulkCreate(productOrders)
+                    resolve({
+                        data: tmp
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'Error find Order'
+                    })
+                }
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService, orderProductService } 

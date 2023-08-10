@@ -20,19 +20,24 @@ module.exports = {
             cityId: {
                 type: Sequelize.STRING
             },
+            shortDescription: {
+                type: Sequelize.TEXT
+            },
             mapLink: {
                 type: Sequelize.TEXT
             },
-            shortDescription: {
+            mapHTML: {
                 type: Sequelize.TEXT
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: DataTypes.NOW
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: DataTypes.NOW
             }
         });
     },

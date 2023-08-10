@@ -10,11 +10,6 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            //     userId: DataTypes.INTEGER,
-            // totalPrice: DataTypes.INTEGER,
-            // statusPayment: DataTypes.STRING,
-            // timeOrder: DataTypes.DATETIME,
-            // orderCode: DataTypes.STRING
             userId: {
                 type: Sequelize.INTEGER,
                 isNull: false
@@ -29,20 +24,18 @@ module.exports = {
                 isNull: false
             },
             timeOrder: {
-                type: Sequelize.DATE,
-                isNull: false
-            },
-            orderCode: {
                 type: Sequelize.STRING,
                 isNull: false
             },
             createdAt: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: DataTypes.NOW
             },
             updatedAt: {
                 allowNull: false,
-                type: Sequelize.DATE
+                type: Sequelize.DATE,
+                defaultValue: DataTypes.NOW
             }
         });
     },

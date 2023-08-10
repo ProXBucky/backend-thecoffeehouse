@@ -97,7 +97,7 @@ let loginAdminService = (body) => {
                 let user = await db.Users.findOne({
                     where: { email: body.email }
                 })
-                if (user) {
+                if (user && user.password) {
                     const checkPassword = bcrypt.compareSync(body.password, user.password)
                     if (checkPassword === true) {
                         let accessToken = jwt.sign(
