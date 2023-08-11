@@ -11,12 +11,22 @@ const hashPassword = (password) => {
 let getAllAdminService = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allAdmin = await db.Users.findAll()
-            resolve({
-                errCode: 0,
-                errMessage: 'Get all admin success',
-                data: allAdmin.reverse()
+            const allAdmin = await db.Users.findAll({
+                where: { roleId: 'R1' }
             })
+            if (allAdmin.length <= 0) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'No data of admin',
+                    data: 'None'
+                })
+            } else {
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Get all admin success',
+                    data: allAdmin.reverse()
+                })
+            }
         } catch (e) {
             console.log(e)
             reject(e)

@@ -2,6 +2,8 @@ const express = require('express')
 const userController = require("../controllers/userController.js")
 const adminController = require("../controllers/adminController.js")
 const appController = require("../controllers/appController.js")
+const orderController = require("../controllers/orderController.js")
+
 
 const router = express.Router()
 
@@ -33,7 +35,11 @@ function initWebRoutes(app) {
     router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
     router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
     router.get('/api/get-detail-store-by-id', appController.getDetailStoreById)
-    router.post('/api/order-product', appController.orderProduct)
+
+    router.post('/api/order-product', orderController.orderProduct)
+    router.get('/api/get-all-order', orderController.getAllOrder)
+    router.put('/api/pay-order', orderController.payOrder)
+
 
     return app.use("/", router);
 }
