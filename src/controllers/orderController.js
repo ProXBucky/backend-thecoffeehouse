@@ -39,4 +39,30 @@ let payOrder = async (req, res) => {
     }
 }
 
-module.exports = { orderProduct, getAllOrder, payOrder }
+let deliverProduct = async (req, res) => {
+    try {
+        let response = await orderService.deliverProductService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: "Error from server"
+        })
+    }
+}
+
+let getAllOrderDelivered = async (req, res) => {
+    try {
+        let response = await orderService.getAllOrderDeliveredService()
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: "Error from server"
+        })
+    }
+}
+
+module.exports = { orderProduct, getAllOrder, payOrder, deliverProduct, getAllOrderDelivered }

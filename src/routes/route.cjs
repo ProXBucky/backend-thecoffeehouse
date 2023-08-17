@@ -14,9 +14,10 @@ function initWebRoutes(app) {
     router.post('/api/login-admin', userController.loginAdmin)
 
     //admin
+    router.put('/api/approve-admin-by-id', adminController.approveAdminById)
+    router.get('/api/get-all-admin-not-approved', adminController.getAllAdminNotApproved)
     router.get('/api/get-all-admin', adminController.getAllAdmin)
     router.get('/api/get-admin-by-id', adminController.getAdminById)
-    // router.get('/api/get-admin-by-email', adminController.getAdminByEmail)
     router.delete('/api/delete-admin', adminController.deleteAdmin)
     router.put('/api/update-admin-data', adminController.updateAdminData)
     //product
@@ -35,10 +36,13 @@ function initWebRoutes(app) {
     router.get('/api/get-all-store-by-city', appController.getAllStoreByCity)
     router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
     router.get('/api/get-detail-store-by-id', appController.getDetailStoreById)
+    router.get('/api/get-best-seller', appController.getBestSeller)
 
     router.post('/api/order-product', orderController.orderProduct)
     router.get('/api/get-all-order', orderController.getAllOrder)
+    router.get('/api/get-all-order-delivered', orderController.getAllOrderDelivered)
     router.put('/api/pay-order', orderController.payOrder)
+    router.put('/api/deliver-product', orderController.deliverProduct)
 
 
     return app.use("/", router);

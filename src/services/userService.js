@@ -45,7 +45,8 @@ let createNewAdminService = (body) => {
                     lastName: body.lastName,
                     address: body.address,
                     roleId: 'R1', // role admin
-                    phone: body.phone
+                    phone: body.phone,
+                    isApproved: false
                 })
                 resolve({
                     errCode: 0,
@@ -100,19 +101,26 @@ let loginAdminService = (body) => {
                 if (user && user.password) {
                     const checkPassword = bcrypt.compareSync(body.password, user.password)
                     if (checkPassword === true) {
-                        let accessToken = jwt.sign(
-                            {
-                                data: user.password
-                            }
-                            , 'access',
-                            { expiresIn: 60 * 60 }
-                        );
-                        resolve({
-                            errCode: 0,
-                            errMessage: 'Login success',
-                            accessToken,
-                            email: user.email
-                        })
+                        if (user.isApproved === false) {
+                            resolve({
+                                errCode: 4,
+                                errMessage: 'Account is not approved by admin'
+                            })
+                        } else if (user.isApproved === true) {
+                            let accessToken = jwt.sign(
+                                {
+                                    data: user.password
+                                }
+                                , 'access',
+                                { expiresIn: 60 * 60 }
+                            );
+                            resolve({
+                                errCode: 0,
+                                errMessage: 'Login success',
+                                accessToken,
+                                email: user.email
+                            })
+                        }
                     } else {
                         resolve({
                             errCode: 2,

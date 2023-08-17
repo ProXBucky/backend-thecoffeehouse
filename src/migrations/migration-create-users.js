@@ -31,15 +31,16 @@ module.exports = {
             roleId: {
                 type: Sequelize.STRING
             },
+            isApproved: {
+                type: Sequelize.BOOLEAN
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
-                defaultValue: DataTypes.NOW
             },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
-                defaultValue: DataTypes.NOW
             }
         });
     },

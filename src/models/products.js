@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Products.belongsTo(models.Allcodes, { foreignKey: 'category', targetKey: 'keyMap', as: 'categoryData' })
-            Products.belongsTo(models.Allcodes, { foreignKey: 'size', targetKey: 'keyMap', as: 'sizeData' })
+            // Products.belongsTo(models.Allcodes, { foreignKey: 'size', targetKey: 'keyMap', as: 'sizeData' })
             Products.hasOne(models.OrderDetail, { foreignKey: 'productId', as: 'ProductData' })
 
         }
@@ -23,9 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         name: DataTypes.STRING,
         description: DataTypes.TEXT,
         category: DataTypes.STRING,
-        size: DataTypes.STRING,
+        // size: DataTypes.STRING,
         image: DataTypes.BLOB('long'),
         originalPrice: DataTypes.INTEGER,
+        quantitySold: DataTypes.INTEGER,
     }, {
         sequelize,
         modelName: 'Products',

@@ -13,6 +13,19 @@ let getAllAdmin = async (req, res) => {
     }
 }
 
+let getAllAdminNotApproved = async (req, res) => {
+    try {
+        let response = await adminService.getAllAdminNotApprovedService()
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getAdminById = async (req, res) => {
     try {
         let response = await adminService.getAdminByIdService(req.query.id)
@@ -161,8 +174,21 @@ let updateStoreData = async (req, res) => {
 }
 
 
+let approveAdminById = async (req, res) => {
+    try {
+        let response = await adminService.approveAdminByIdService(req.query.id)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e)
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 
 module.exports = {
     getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail, createNewProduct, deleteProduct, updateProductData,
-    createNewStore, uploadMultiImage, updateStoreData, deleteStore
+    createNewStore, uploadMultiImage, updateStoreData, deleteStore, approveAdminById, getAllAdminNotApproved
 }

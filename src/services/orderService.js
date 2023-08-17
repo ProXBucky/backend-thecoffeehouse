@@ -29,12 +29,26 @@ let orderProductService = (body) => {
                             orderId: order.id,
                             productId: item.id,
                             quantity: item.cartQuantity,
-                            price: item.originalPrice
                         })
                     })
+                    await body.cartItems.map(async (item) => {
+                        let productTmp = await db.Products.findOne({ where: { id: item.id } })
+                        if (!productTmp) {
+                            resolve({
+                                errCode: 3,
+                                errMessage: 'Product is not found'
+                            })
+                        } else {
+                            productTmp.quantitySold = productTmp.quantitySold += item.cartQuantity
+                            await productTmp.save()
+                        }
+                    })
+
                     const tmp = await db.OrderDetail.bulkCreate(productOrders)
                     resolve({
-                        data: tmp
+                        data: tmp,
+                        errCode: 0,
+                        errMessage: 'Order success'
                     })
                 } else {
                     resolve({
@@ -58,20 +72,21 @@ let getAllOrderService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const orderArr = await db.Orders.findAll({      // Tim cac Order chua tra tien
+                where: { statusPayment: ['SP1', 'SP2'] },
                 attributes: { exclude: ['createdAt', 'updatedAt'] },
                 include: [
                     { model: db.Users, as: 'UserData', attributes: ['id', 'email', 'firstName', 'lastName', 'address', 'phone'] },
                     { model: db.Allcodes, as: 'StatusData', attributes: ['valueEn', 'valueVn'] },
                     {
-                        model: db.OrderDetail, as: 'OrderData', attributes: ['id', 'orderId', 'productId', 'quantity', 'price'],
+                        model: db.OrderDetail, as: 'OrderData', attributes: ['id', 'orderId', 'productId', 'quantity'],
                         include: [
-                            { model: db.Products, as: 'ProductData', attributes: ['id', 'name', 'image'] }
+                            { model: db.Products, as: 'ProductData', attributes: ['id', 'name', 'image', 'originalPrice'] }
                         ]
-
                     },
                 ],
                 order: [
-                    ['statusPayment', 'ASC']
+                    ['statusPayment', 'ASC'],
+                    ['timeOrder', 'DESC']
                 ],
             })
             if (orderArr.length <= 0) {
@@ -119,4 +134,69 @@ let payOrderService = (body) => {
     })
 }
 
-module.exports = { orderProductService, getAllOrderService, payOrderService }
+let deliverProductService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const orderUpdate = await db.Orders.findOne({
+                where: { id: body.id }
+            })
+            if (orderUpdate) {
+                orderUpdate.statusPayment = 'SP3'
+                await orderUpdate.save();
+                resolve({
+                    errCode: 0,
+                    errMessage: "Update status success"
+                })
+
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Order not found'
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let getAllOrderDeliveredService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const orderArr = await db.Orders.findAll({      // Tim cac Order chua tra tien
+                where: { statusPayment: 'SP3' },
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                include: [
+                    { model: db.Users, as: 'UserData', attributes: ['id', 'email', 'firstName', 'lastName', 'address', 'phone'] },
+                    { model: db.Allcodes, as: 'StatusData', attributes: ['valueEn', 'valueVn'] },
+                    {
+                        model: db.OrderDetail, as: 'OrderData', attributes: ['id', 'orderId', 'productId', 'quantity'],
+                        include: [
+                            { model: db.Products, as: 'ProductData', attributes: ['id', 'name', 'image', 'originalPrice'] }
+                        ]
+                    },
+                ],
+                order: [
+                    ['timeOrder', 'DESC']
+                ],
+            })
+            if (orderArr.length <= 0) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "No data",
+                    data: 'None'
+                })
+            } else {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Get data success",
+                    data: orderArr
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { orderProductService, getAllOrderService, payOrderService, deliverProductService, getAllOrderDeliveredService }

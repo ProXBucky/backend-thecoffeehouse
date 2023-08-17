@@ -19,24 +19,25 @@ module.exports = {
             category: {
                 type: Sequelize.STRING
             },
-            size: {
-                type: Sequelize.STRING
-            },
+            // size: {
+            //     type: Sequelize.STRING
+            // },
             image: {
                 type: Sequelize.BLOB('long')
             },
             originalPrice: {
                 type: Sequelize.INTEGER
             },
+            quantitySold: {
+                type: Sequelize.INTEGER
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
-                defaultValue: DataTypes.NOW
             },
             updatedAt: {
                 allowNull: false,
                 type: Sequelize.DATE,
-                defaultValue: DataTypes.NOW
             }
         });
     },

@@ -24,7 +24,7 @@ let getAllCodeByTypeService = (type) => {
     })
 }
 
-let getAllProductByCategoryService = (category) => {
+let getAllProductByCategoryService = (category, limit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let productArr = []
@@ -32,7 +32,7 @@ let getAllProductByCategoryService = (category) => {
                 productArr = await db.Products.findAll({
                     include: [
                         { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                        { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                        // { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
                     ],
                     order: [
                         ['category', 'DESC'],
@@ -40,10 +40,11 @@ let getAllProductByCategoryService = (category) => {
                 })
             } else {
                 productArr = await db.Products.findAll({
+                    limit: limit,
                     where: { category: category },
                     include: [
                         { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                        { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                        // { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
                     ],
                 })
             }
@@ -176,5 +177,53 @@ let getDetailStoreByIdService = (id) => {
     })
 }
 
+let getBestSellerService = (limit) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let productArr = []
+            if (limit) {
+                productArr = await db.Products.findAll({
+                    include: [
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    ],
+                    order: [
+                        ['quantitySold', 'DESC'],
+                        ['id', 'DESC']
+                    ],
+                    limit: limit,
+                })
+            } else {
+                productArr = await db.Products.findAll({
+                    include: [
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                    ],
+                    order: [
+                        ['quantitySold', 'DESC'],
+                        ['id', 'DESC']
+                    ],
+                })
+            }
+            if (productArr.length > 0) {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Fetch data success",
+                    data: productArr.reverse()
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Fetch data fail",
+                    data: 'None'
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
-module.exports = { getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService } 
+
+module.exports = {
+    getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService,
+    getBestSellerService
+} 

@@ -15,7 +15,7 @@ let getAllCodeByType = async (req, res) => {
 
 let getAllProductByCategory = async (req, res) => {
     try {
-        let response = await appService.getAllProductByCategoryService(req.query.category)
+        let response = await appService.getAllProductByCategoryService(req.query.category, +req.query.limit)
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
@@ -65,5 +65,18 @@ let getDetailStoreById = async (req, res) => {
     }
 }
 
+let getBestSeller = async (req, res) => {
+    try {
+        let response = await appService.getBestSellerService(+req.query.limit)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: "Error from server"
+        })
+    }
+}
 
-module.exports = { getAllCodeByType, getAllProductByCategory, getAllStoreByCity, getDetailProductById, getDetailStoreById }
+
+module.exports = { getAllCodeByType, getAllProductByCategory, getAllStoreByCity, getDetailProductById, getDetailStoreById, getBestSeller }

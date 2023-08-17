@@ -12,7 +12,7 @@ let getAllAdminService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allAdmin = await db.Users.findAll({
-                where: { roleId: 'R1' }
+                where: { roleId: 'R1', isApproved: true }
             })
             if (allAdmin.length <= 0) {
                 resolve({
@@ -24,7 +24,7 @@ let getAllAdminService = () => {
                 resolve({
                     errCode: 0,
                     errMessage: 'Get all admin success',
-                    data: allAdmin.reverse()
+                    data: allAdmin
                 })
             }
         } catch (e) {
@@ -33,6 +33,60 @@ let getAllAdminService = () => {
         }
     })
 }
+
+let getAllAdminNotApprovedService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const allAdmin = await db.Users.findAll({
+                where: { roleId: 'R1', isApproved: false }
+            })
+            if (allAdmin.length <= 0) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'No data of admin',
+                    data: 'None'
+                })
+            } else {
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Get all admin success',
+                    data: allAdmin
+                })
+            }
+        } catch (e) {
+            console.log(e)
+            reject(e)
+        }
+    })
+}
+
+let approveAdminByIdService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const admin = await db.Users.findOne({
+                where: { id: id }
+            })
+            if (admin) {
+                admin.isApproved = true
+                await admin.save();
+                resolve({
+                    errCode: 0,
+                    errMessage: "Update data success"
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Admin not found'
+                })
+            }
+        }
+        catch (e) {
+            console.log(e)
+            reject(e)
+        }
+    })
+}
+
 
 let getAdminByIdService = (id) => {
     return new Promise(async (resolve, reject) => {
@@ -146,9 +200,10 @@ let createNewProductSevice = (body) => {
                 name: body.name,
                 originalPrice: body.originalPrice,
                 category: body.category,
-                size: body.size,
+                // size: body.size,
                 image: body.image,
-                description: body.description
+                description: body.description,
+                quantitySold: 0
             })
             resolve({
                 errCode: 0,
@@ -186,7 +241,7 @@ let updateProductDataService = (body) => {
                 productUpdate.name = body.name
                 productUpdate.description = body.description
                 productUpdate.category = body.category
-                productUpdate.size = body.size
+                // productUpdate.size = body.size
                 productUpdate.image = body.image
                 productUpdate.originalPrice = body.originalPrice
                 await productUpdate.save();
@@ -304,5 +359,6 @@ let updateStoreDataService = (body) => {
 
 module.exports = {
     getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
-    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService, updateStoreDataService, deleteStoreService
+    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService, updateStoreDataService, deleteStoreService,
+    approveAdminByIdService, getAllAdminNotApprovedService
 }
