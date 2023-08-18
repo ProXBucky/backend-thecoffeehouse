@@ -28,23 +28,30 @@ let getAllProductByCategoryService = (category, limit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let productArr = []
-            if (category === 'ALL') {
-                productArr = await db.Products.findAll({
-                    include: [
-                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                        // { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
-                    ],
-                    order: [
-                        ['category', 'DESC'],
-                    ],
-                })
+            if (!limit) {
+                if (category === 'ALL') {
+                    productArr = await db.Products.findAll({
+                        include: [
+                            { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
+                        ],
+                        order: [
+                            ['category', 'DESC'],
+                        ],
+                    })
+                } else {
+                    productArr = await db.Products.findAll({
+                        where: { category: category },
+                        include: [
+                            { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
+                        ],
+                    })
+                }
             } else {
                 productArr = await db.Products.findAll({
                     limit: limit,
                     where: { category: category },
                     include: [
-                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                        // { model: db.Allcodes, as: 'sizeData', attributes: ['valueEn', 'valueVn'] }
+                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
                     ],
                 })
             }

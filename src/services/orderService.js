@@ -46,7 +46,7 @@ let orderProductService = (body) => {
 
                     const tmp = await db.OrderDetail.bulkCreate(productOrders)
                     resolve({
-                        data: tmp,
+                        // data: tmp,
                         errCode: 0,
                         errMessage: 'Order success'
                     })
