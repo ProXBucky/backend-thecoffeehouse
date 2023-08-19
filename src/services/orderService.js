@@ -199,4 +199,38 @@ let getAllOrderDeliveredService = () => {
     })
 }
 
-module.exports = { orderProductService, getAllOrderService, payOrderService, deliverProductService, getAllOrderDeliveredService }
+let getLastestOrderService = (limit) => {
+    return new Promise(async (resolve, reject) => {
+        if (!limit) limit = 5
+        try {
+            const orderArr = await db.Orders.findAll({      // Tim cac Order chua tra tien
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                include: [
+                    { model: db.Users, as: 'UserData', attributes: ['id', 'email', 'firstName', 'lastName', 'address', 'phone'] },
+                    { model: db.Allcodes, as: 'StatusData', attributes: ['valueEn', 'valueVn'] },
+                ],
+                order: [
+                    ['timeOrder', 'DESC']
+                ],
+                limit: limit
+            })
+            if (orderArr.length <= 0) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "No data",
+                    data: 'None'
+                })
+            } else {
+                resolve({
+                    errCode: 0,
+                    errMessage: "Get data success",
+                    data: orderArr
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = { orderProductService, getAllOrderService, payOrderService, deliverProductService, getAllOrderDeliveredService, getLastestOrderService }

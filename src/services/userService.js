@@ -35,7 +35,7 @@ let createNewAdminService = (body) => {
             if (await checkEmailExist(body.email)) {
                 resolve({
                     errCode: 1,
-                    errMessage: 'User is exist, please type diffirent email'
+                    errMessage: 'Tài khoản đã tồn tại, vui lòng nhập email khác'
                 })
             } else {
                 await db.Users.create({
@@ -92,7 +92,8 @@ let loginAdminService = (body) => {
             if (await checkEmailExist(body.email) === false) {
                 resolve({
                     errCode: 1,
-                    errMessage: 'User is not exist, please register new account'
+                    errMessage2: 'User is not exist, please register new account',
+                    errMessage1: 'Tài khoản không tồn tại, vui lòng đăng ký tài khoản mới'
                 })
             } else {
                 let user = await db.Users.findOne({
@@ -104,9 +105,11 @@ let loginAdminService = (body) => {
                         if (user.isApproved === false) {
                             resolve({
                                 errCode: 4,
-                                errMessage: 'Account is not approved by admin'
+                                errMessage2: 'Account is not approved by admin',
+                                errMessage1: 'Tài khoản chưa được duyệt',
                             })
-                        } else if (user.isApproved === true) {
+                        }
+                        else if (user.isApproved === true) {
                             let accessToken = jwt.sign(
                                 {
                                     data: user.password
@@ -124,13 +127,15 @@ let loginAdminService = (body) => {
                     } else {
                         resolve({
                             errCode: 2,
-                            errMessage: 'Password is wrong'
+                            errMessage2: 'Password is wrong',
+                            errMessage1: 'Sai mật khẩu',
                         })
                     }
                 } else {
                     resolve({
                         errCode: 3,
-                        errMessage: 'User is not found '
+                        errMessage2: 'User is not found ',
+                        errMessage1: 'Không có dữ liệu',
                     })
                 }
             }

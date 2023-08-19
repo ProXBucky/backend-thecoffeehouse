@@ -78,5 +78,18 @@ let getBestSeller = async (req, res) => {
     }
 }
 
+let getStatisticsApp = async (req, res) => {
+    try {
+        let response = await appService.getStatisticsAppService()
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: "Error from server"
+        })
+    }
+}
 
-module.exports = { getAllCodeByType, getAllProductByCategory, getAllStoreByCity, getDetailProductById, getDetailStoreById, getBestSeller }
+
+module.exports = { getAllCodeByType, getAllProductByCategory, getAllStoreByCity, getDetailProductById, getDetailStoreById, getBestSeller, getStatisticsApp }

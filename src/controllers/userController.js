@@ -13,8 +13,16 @@ let getPage = (req, res) => {
 }
 
 let createNewAdmin = async (req, res) => {
-    let response = await userService.createNewAdminService(req.body)
-    return res.status(200).json(response)
+    try {
+        let response = await userService.createNewAdminService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error server'
+        })
+    }
 }
 
 let loginAdmin = async (req, res) => {
@@ -23,7 +31,7 @@ let loginAdmin = async (req, res) => {
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
-        return res.status(200).json({
+        return res.status(404).json({
             errCode: -1,
             errMessage: 'Error server'
         })

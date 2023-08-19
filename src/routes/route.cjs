@@ -37,12 +37,15 @@ function initWebRoutes(app) {
     router.get('/api/get-detail-product-by-id', appController.getDetailProductById)
     router.get('/api/get-detail-store-by-id', appController.getDetailStoreById)
     router.get('/api/get-best-seller', appController.getBestSeller)
+    router.get('/api/get-statistics-app', appController.getStatisticsApp)
+
 
     router.post('/api/order-product', orderController.orderProduct)
     router.get('/api/get-all-order', orderController.getAllOrder)
     router.get('/api/get-all-order-delivered', orderController.getAllOrderDelivered)
     router.put('/api/pay-order', orderController.payOrder)
     router.put('/api/deliver-product', orderController.deliverProduct)
+    router.get('/api/get-lastest-order', orderController.getLastestOrder)
 
 
     return app.use("/", router);

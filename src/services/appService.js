@@ -214,7 +214,7 @@ let getBestSellerService = (limit) => {
                 resolve({
                     errCode: 0,
                     errMessage: "Fetch data success",
-                    data: productArr.reverse()
+                    data: productArr
                 })
             } else {
                 resolve({
@@ -229,8 +229,51 @@ let getBestSellerService = (limit) => {
     })
 }
 
+let getStatisticsAppService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // count admin
+            const totalAdmins = await db.Users.count({
+                where: { roleId: 'R1', isApproved: 1 }
+            });
+
+            // count product
+            const totalProducts = await db.Products.count();
+
+            // count store
+            const totalStores = await db.Stores.count();
+
+            // count orders
+            const totalOrders = await db.Orders.count();
+
+            // calculate income
+            const totalIncome = await db.Orders.sum(
+                'totalPrice',
+                {
+                    where: { statusPayment: ['SP2', 'SP3'] },
+                });
+            if (totalAdmins && totalProducts && totalStores && totalOrders && totalIncome) {
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Get data success',
+                    data: {
+                        totalAdmins, totalProducts, totalOrders, totalStores, totalIncome
+                    }
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Get data fail because missing data',
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 
 module.exports = {
     getAllCodeByTypeService, getAllProductByCategoryService, getAllStoreByCityService, getDetailProductByIdService, getDetailStoreByIdService,
-    getBestSellerService
+    getBestSellerService, getStatisticsAppService
 } 
