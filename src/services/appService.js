@@ -47,19 +47,31 @@ let getAllProductByCategoryService = (category, limit) => {
                     })
                 }
             } else {
-                productArr = await db.Products.findAll({
-                    limit: limit,
-                    where: { category: category },
-                    include: [
-                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
-                    ],
-                })
+                if (category === 'ALL') {
+                    productArr = await db.Products.findAll({
+                        limit: limit,
+                        include: [
+                            { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
+                        ],
+                        order: [
+                            ['id', 'DESC'],
+                        ],
+                    })
+                } else {
+                    productArr = await db.Products.findAll({
+                        limit: limit,
+                        where: { category: category },
+                        include: [
+                            { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
+                        ],
+                    })
+                }
             }
             if (productArr.length > 0) {
                 resolve({
                     errCode: 0,
                     errMessage: "Fetch data success",
-                    data: productArr.reverse()
+                    data: productArr
                 })
             } else {
                 resolve({

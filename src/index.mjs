@@ -7,8 +7,7 @@ import initWebRoutes from './routes/route.cjs'
 import livereload from "livereload"
 import connectLiveReload from "connect-livereload"
 import cors from "cors"
-import session from 'express-session'
-import jwt from 'jsonwebtoken'
+import cookieParser from 'cookie-parser'
 dotenv.config()
 
 
@@ -31,33 +30,12 @@ if (env === "development") {
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 100000, }));
-
+app.use(cookieParser());
 app.use(cors())
-
-
 
 initWebRoutes(app)
 viewConfig(app)
 connectDB()
-
-app.use(session({ secret: "fingerprint", resave: true, saveUninitialized: true }))
-
-app.use("/system", (req, res, next) => {
-    if (req.session.authorization) {
-        let token = req.session.authorization['accessToken'];
-        jwt.verify(token, "access", (err, user) => {
-            if (!err) {
-                req.user = user;
-                next();
-            }
-            else {
-                return res.status(403).json({ message: "User not authenticated" })
-            }
-        });
-    } else {
-        return res.status(403).json({ message: "User not logged in" })
-    }
-});
 
 
 let port = process.env.PORT || 4000

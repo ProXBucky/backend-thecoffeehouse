@@ -8,10 +8,6 @@ let getHome = async (req, res) => {
     })
 }
 
-let getPage = (req, res) => {
-    res.send('Hello Page')
-}
-
 let createNewAdmin = async (req, res) => {
     try {
         let response = await userService.createNewAdminService(req.body)
@@ -38,4 +34,4 @@ let loginAdmin = async (req, res) => {
     }
 }
 
-module.exports = { getHome, getPage, createNewAdmin, loginAdmin }
+module.exports = { getHome, createNewAdmin, loginAdmin }

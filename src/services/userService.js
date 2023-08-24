@@ -1,15 +1,15 @@
 const db = require("../models/index.js")
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
-const randToken = require("rand-token")
-const jwt = require("jsonwebtoken")
-const session = require('express-session')
+const saltRounds = 10
+const dotenv = require("dotenv")
+dotenv.config()
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
     return hash
 }
+
 
 let checkEmailExist = (emailNew) => {
     return new Promise(async (resolve, reject) => {
@@ -44,7 +44,7 @@ let createNewAdminService = (body) => {
                     firstName: body.firstName,
                     lastName: body.lastName,
                     address: body.address,
-                    roleId: 'R1', // role admin
+                    roleId: 'R2', // role admin
                     phone: body.phone,
                     isApproved: false
                 })
@@ -60,92 +60,8 @@ let createNewAdminService = (body) => {
     })
 }
 
-// let updateRefreshToken = (email, refreshToken) => {
-//     return new Promise(async (resolve, reject) => {
-//         try {
-//             let user = await db.Users.findOne({
-//                 where: { email: email }
-//             })
-//             if (!user) {
-//                 resolve({
-//                     errCode: 1,
-//                     errMessage: 'User not found'
-//                 })
-//             } else {
-//                 user.refreshToken = refreshToken
-//                 await user.save()
-//                 resolve({
-//                     errCode: 0,
-//                     errMessage: 'Update success'
-//                 })
-//             }
-//         } catch (e) {
-//             console.log(e);
-//             reject(e);
-//         }
-//     })
-// }
-
-let loginAdminService = (body) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (await checkEmailExist(body.email) === false) {
-                resolve({
-                    errCode: 1,
-                    errMessage2: 'User is not exist, please register new account',
-                    errMessage1: 'Tài khoản không tồn tại, vui lòng đăng ký tài khoản mới'
-                })
-            } else {
-                let user = await db.Users.findOne({
-                    where: { email: body.email }
-                })
-                if (user && user.password) {
-                    const checkPassword = bcrypt.compareSync(body.password, user.password)
-                    if (checkPassword === true) {
-                        if (user.isApproved === false) {
-                            resolve({
-                                errCode: 4,
-                                errMessage2: 'Account is not approved by admin',
-                                errMessage1: 'Tài khoản chưa được duyệt',
-                            })
-                        }
-                        else if (user.isApproved === true) {
-                            let accessToken = jwt.sign(
-                                {
-                                    data: user.password
-                                }
-                                , 'access',
-                                { expiresIn: 60 * 60 }
-                            );
-                            resolve({
-                                errCode: 0,
-                                errMessage: 'Login success',
-                                accessToken,
-                                email: user.email
-                            })
-                        }
-                    } else {
-                        resolve({
-                            errCode: 2,
-                            errMessage2: 'Password is wrong',
-                            errMessage1: 'Sai mật khẩu',
-                        })
-                    }
-                } else {
-                    resolve({
-                        errCode: 3,
-                        errMessage2: 'User is not found ',
-                        errMessage1: 'Không có dữ liệu',
-                    })
-                }
-            }
-        } catch (e) {
-            console.log(e);
-            reject(e);
-        }
-    })
-}
 
 
 
-module.exports = { createNewAdminService, loginAdminService }
+
+module.exports = { createNewAdminService }
