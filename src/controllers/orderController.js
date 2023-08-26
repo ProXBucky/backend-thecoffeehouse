@@ -78,4 +78,17 @@ let getLastestOrder = async (req, res) => {
     }
 }
 
-module.exports = { orderProduct, getAllOrder, payOrder, deliverProduct, getAllOrderDelivered, getLastestOrder }
+let deleteOrder = async (req, res) => {
+    try {
+        let response = await orderService.deleteOrderService(req.query.id)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: "Error from server"
+        })
+    }
+}
+
+module.exports = { orderProduct, getAllOrder, payOrder, deliverProduct, getAllOrderDelivered, getLastestOrder, deleteOrder }

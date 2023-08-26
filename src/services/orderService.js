@@ -233,4 +233,39 @@ let getLastestOrderService = (limit) => {
     })
 }
 
-module.exports = { orderProductService, getAllOrderService, payOrderService, deliverProductService, getAllOrderDeliveredService, getLastestOrderService }
+let deleteOrderService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                })
+            } else {
+                let res = await db.Orders.findOne({
+                    where: { id: id }
+                })
+                if (res) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Delete order success'
+                    })
+                } else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'Dont find to order'
+                    })
+                }
+
+            }
+            resolve
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+module.exports = {
+    orderProductService, getAllOrderService, payOrderService, deliverProductService, getAllOrderDeliveredService,
+    getLastestOrderService, deleteOrderService
+}

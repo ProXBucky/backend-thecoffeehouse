@@ -200,28 +200,16 @@ let getBestSellerService = (limit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let productArr = []
-            if (limit) {
-                productArr = await db.Products.findAll({
-                    include: [
-                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                    ],
-                    order: [
-                        ['quantitySold', 'DESC'],
-                        ['id', 'DESC']
-                    ],
-                    limit: limit,
-                })
-            } else {
-                productArr = await db.Products.findAll({
-                    include: [
-                        { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
-                    ],
-                    order: [
-                        ['quantitySold', 'DESC'],
-                        ['id', 'DESC']
-                    ],
-                })
-            }
+            productArr = await db.Products.findAll({
+                limit: limit,
+                include: [
+                    { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] },
+                ],
+                order: [
+                    ['quantitySold', 'DESC'],
+                    ['id', 'DESC']
+                ],
+            })
             if (productArr.length > 0) {
                 resolve({
                     errCode: 0,

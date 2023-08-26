@@ -21,17 +21,5 @@ let createNewAdmin = async (req, res) => {
     }
 }
 
-let loginAdmin = async (req, res) => {
-    try {
-        let response = await userService.loginAdminService(req.body)
-        return res.status(200).json(response)
-    } catch (e) {
-        console.log(e);
-        return res.status(404).json({
-            errCode: -1,
-            errMessage: 'Error server'
-        })
-    }
-}
 
-module.exports = { getHome, createNewAdmin, loginAdmin }
+module.exports = { getHome, createNewAdmin, }

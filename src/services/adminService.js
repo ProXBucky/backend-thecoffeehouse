@@ -12,7 +12,7 @@ let getAllAdminService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allAdmin = await db.Users.findAll({
-                where: { roleId: 'R1', isApproved: true }
+                where: { roleId: ['R1', 'R2'], isApproved: true }
             })
             if (allAdmin.length <= 0) {
                 resolve({
@@ -357,8 +357,59 @@ let updateStoreDataService = (body) => {
     })
 }
 
+
+let checkEmailExist = (emailNew) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let emailExist = await db.Users.findOne({
+                where: { email: emailNew }
+            })
+            if (emailExist) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        } catch (e) {
+            console.log(e);
+            reject(e)
+        }
+    })
+}
+
+let createNewManagerService = (body) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (await checkEmailExist(body.email)) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Tài khoản đã tồn tại, vui lòng nhập email khác'
+                })
+            } else {
+                await db.Users.create({
+                    email: body.email,
+                    password: hashPassword(body.password),
+                    firstName: body.firstName,
+                    lastName: body.lastName,
+                    address: body.address,
+                    roleId: 'R1', // role manager
+                    phone: body.phone,
+                    isApproved: false
+                })
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Create new manager success'
+                })
+            }
+        } catch (e) {
+            console.log(e)
+            reject(e);
+        }
+    })
+}
+
+
 module.exports = {
     getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
     deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService, updateStoreDataService, deleteStoreService,
-    approveAdminByIdService, getAllAdminNotApprovedService
+    approveAdminByIdService, getAllAdminNotApprovedService, createNewManagerService
 }

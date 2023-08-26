@@ -187,8 +187,21 @@ let approveAdminById = async (req, res) => {
     }
 }
 
+let createNewManager = async (req, res) => {
+    try {
+        const response = await adminService.createNewManagerService(req.body)
+        return res.status(200).json(response)
+    } catch (e) {
+        console.log(e);
+        return res.status(404).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 
 module.exports = {
     getAllAdmin, getAdminById, deleteAdmin, updateAdminData, getAdminByEmail, createNewProduct, deleteProduct, updateProductData,
-    createNewStore, uploadMultiImage, updateStoreData, deleteStore, approveAdminById, getAllAdminNotApproved
+    createNewStore, uploadMultiImage, updateStoreData, deleteStore, approveAdminById, getAllAdminNotApproved, createNewManager
 }

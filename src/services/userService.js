@@ -1,8 +1,8 @@
 const db = require("../models/index.js")
-const bcrypt = require('bcrypt');
-const saltRounds = 10
 const dotenv = require("dotenv")
 dotenv.config()
+const bcrypt = require('bcrypt');
+const saltRounds = 10
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);

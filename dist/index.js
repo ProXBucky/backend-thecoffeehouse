@@ -6,7 +6,6 @@ var _viewEngine = _interopRequireDefault(require("./config/viewEngine.mjs"));
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 var _dotenv = _interopRequireDefault(require("dotenv"));
 var _route = _interopRequireDefault(require("./routes/route.cjs"));
-var _auth = _interopRequireDefault(require("./routes/auth.cjs"));
 var _livereload = _interopRequireDefault(require("livereload"));
 var _connectLivereload = _interopRequireDefault(require("connect-livereload"));
 var _cors = _interopRequireDefault(require("cors"));
@@ -36,7 +35,6 @@ app.use(_bodyParser.default.urlencoded({
 }));
 app.use((0, _cookieParser.default)());
 app.use((0, _cors.default)());
-(0, _auth.default)(app);
 (0, _route.default)(app);
 (0, _viewEngine.default)(app);
 (0, _connectDB.default)();
