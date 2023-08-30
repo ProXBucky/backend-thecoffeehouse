@@ -1,6 +1,9 @@
 const db = require("../models/index.js")
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const cloudinary = require('cloudinary').v2;
+
+
 
 const hashPassword = (password) => {
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -196,12 +199,16 @@ let createNewProductSevice = (body) => {
                     errMessage: 'Missing required parameter'
                 })
             }
+            const cloudinaryUpload = await cloudinary.uploader.upload(body.image, { folder: 'uploads' });
+            const imageUrl = cloudinaryUpload.secure_url;
+            // Lưu đường dẫn vào cơ sở dữ liệu bằng Sequelize
+
             await db.Products.create({
                 name: body.name,
                 originalPrice: body.originalPrice,
                 category: body.category,
-                // size: body.size,
-                image: body.image,
+                // image: body.image,
+                image: imageUrl,
                 description: body.description,
                 quantitySold: 0
             })
@@ -266,35 +273,39 @@ let updateProductDataService = (body) => {
 let createNewStoreService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.Stores.create({
-                id: body.id,
+            const store = await db.Stores.create({
                 nameStore: body.nameStore,
                 address: body.address,
-                cityId: body.cityId,
                 description: body.description,
+                cityId: body.cityId,
                 shortDescription: body.shortDescription,
-                storeId: body.storeId,
                 mapLink: body.mapLink,
                 mapHTML: body.mapHTML,
             })
-            resolve({
-                errCode: 0,
-                errMessage: "Create product success"
-            })
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
-
-let uploadMultiImageService = (body) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            await db.ImageStore.bulkCreate(body)
-            resolve({
-                errCode: 0,
-                errMessage: "Upload store's images success"
-            })
+            if (store) {
+                const newArray = []
+                const imageDatas = [...body.image] // Mảng dữ liệu Base64 của các ảnh
+                const promises = imageDatas.map(async (imageData) => {
+                    const cloudinaryUpload = await cloudinary.uploader.upload(imageData.base64Image, { folder: 'uploads' });
+                    const imageUrl = cloudinaryUpload.secure_url;
+                    imageData = { ...imageData }
+                    newArray.push({
+                        storeId: store.id,
+                        image: imageUrl
+                    })
+                })
+                await Promise.all(promises);  // Wait process 
+                await db.ImageStore.bulkCreate(newArray)
+                resolve({
+                    errCode: 0,
+                    errMessage: "Create store success",
+                })
+            } else {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Create store but create image fail"
+                })
+            }
         } catch (e) {
             reject(e);
         }
@@ -410,6 +421,8 @@ let createNewManagerService = (body) => {
 
 module.exports = {
     getAllAdminService, getAdminByIdService, deleteAdminService, updateAdminDataService, getAdminByEmailService, createNewProductSevice,
-    deleteProductService, updateProductDataService, createNewStoreService, uploadMultiImageService, updateStoreDataService, deleteStoreService,
+    deleteProductService, updateProductDataService, createNewStoreService, updateStoreDataService, deleteStoreService,
     approveAdminByIdService, getAllAdminNotApprovedService, createNewManagerService
 }
+
+// uploadMultiImageService

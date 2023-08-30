@@ -10,6 +10,7 @@ var _livereload = _interopRequireDefault(require("livereload"));
 var _connectLivereload = _interopRequireDefault(require("connect-livereload"));
 var _cors = _interopRequireDefault(require("cors"));
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
+var _cloudinary = require("cloudinary");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 _dotenv.default.config();
 
@@ -35,8 +36,19 @@ app.use(_bodyParser.default.urlencoded({
 }));
 app.use((0, _cookieParser.default)());
 app.use((0, _cors.default)());
+
+// Cấu hình kết nối Cloudinary
+_cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
+// Kết nối Routes
 (0, _route.default)(app);
 (0, _viewEngine.default)(app);
+
+//Kết nối database
 (0, _connectDB.default)();
 let port = process.env.PORT || 4000;
 app.listen(port, () => {

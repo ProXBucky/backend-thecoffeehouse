@@ -8,6 +8,7 @@ import livereload from "livereload"
 import connectLiveReload from "connect-livereload"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
+import { v2 as cloudinary } from 'cloudinary';
 dotenv.config()
 
 
@@ -20,9 +21,7 @@ liveReloadServer.server.once("connection", () => {
 });
 
 let app = express()
-
 const env = process.env.NODE_ENV || "development";
-
 if (env === "development") {
     app.use(connectLiveReload());
 }
@@ -33,8 +32,20 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 1
 app.use(cookieParser());
 app.use(cors())
 
+
+
+// Cấu hình kết nối Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET
+});
+
+// Kết nối Routes
 initWebRoutes(app)
 viewConfig(app)
+
+//Kết nối database
 connectDB()
 
 

@@ -6,6 +6,8 @@ const orderController = require("../controllers/orderController.js")
 const jwt = require("jsonwebtoken")
 const db = require("../models/index.js")
 const bcrypt = require('bcrypt');
+// const multer = require('multer');
+// const upload = multer({ dest: 'uploads/' });
 
 
 
@@ -40,7 +42,6 @@ function initWebRoutes(app) {
             res.status(200).json({ errMessage: 'Invalid token' });
         }
     }
-
 
     const verifyUser = (req, res, next) => {
         const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
