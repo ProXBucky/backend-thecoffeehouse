@@ -18,6 +18,10 @@ module.exports = {
                 type: Sequelize.STRING,
                 isNull: false
             },
+            cloudId: {
+                type: Sequelize.STRING,
+                isNull: false
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     ImageStore.init({
         storeId: DataTypes.STRING,
         image: DataTypes.STRING,
+        cloudId: DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'ImageStore',

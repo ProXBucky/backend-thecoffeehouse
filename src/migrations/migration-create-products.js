@@ -19,9 +19,6 @@ module.exports = {
             category: {
                 type: Sequelize.STRING
             },
-            // size: {
-            //     type: Sequelize.STRING
-            // },
             image: {
                 type: Sequelize.STRING
             },
@@ -30,6 +27,9 @@ module.exports = {
             },
             quantitySold: {
                 type: Sequelize.INTEGER
+            },
+            cloudId: {
+                type: Sequelize.STRING
             },
             createdAt: {
                 allowNull: false,
