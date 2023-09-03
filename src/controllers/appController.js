@@ -15,7 +15,7 @@ let getAllCodeByType = async (req, res) => {
 
 let getAllProductByCategory = async (req, res) => {
     try {
-        let response = await appService.getAllProductByCategoryService(req.query.category, +req.query.limit)
+        let response = await appService.getAllProductByCategoryService(req.query.category, +req.query.page, +req.query.itemsPerPage, +req.query.limit)
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);
@@ -28,7 +28,7 @@ let getAllProductByCategory = async (req, res) => {
 
 let getAllStoreByCity = async (req, res) => {
     try {
-        let response = await appService.getAllStoreByCityService(req.query.city)
+        let response = await appService.getAllStoreByCityService(req.query.city, +req.query.page, +req.query.itemsPerPage, +req.query.limit)
         return res.status(200).json(response)
     } catch (e) {
         console.log(e);

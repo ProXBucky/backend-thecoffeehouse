@@ -24,20 +24,29 @@ let getAllCodeByTypeService = (type) => {
     })
 }
 
-let getAllProductByCategoryService = (category, limit) => {
+let getAllProductByCategoryService = (category, page, itemsPerPage, limit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let productArr = []
-            if (!limit) {
+            let dataProduct = [];
+            let totalPages = 0;
+            // Không có Limit
+            if (limit == 0) {
                 if (category === 'ALL') {
                     productArr = await db.Products.findAll({
                         include: [
                             { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
                         ],
                         order: [
-                            ['category', 'DESC'],
+                            ['category', 'ASC'],
                         ],
                     })
+                    // Pagination
+                    const startIndex = (page - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    dataProduct = productArr.slice(startIndex, endIndex);
+                    totalPages = Math.ceil(productArr.length / itemsPerPage);
+                    // totalPages = itemsPerPage;
                 } else {
                     productArr = await db.Products.findAll({
                         where: { category: category },
@@ -45,8 +54,15 @@ let getAllProductByCategoryService = (category, limit) => {
                             { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
                         ],
                     })
+                    // Pagination
+                    const startIndex = (page - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    dataProduct = productArr.slice(startIndex, endIndex);
+                    totalPages = Math.ceil(productArr.length / itemsPerPage);
                 }
-            } else {
+            }
+            // Có limit
+            else if ((page == 0) || (itemsPerPage == 0)) {
                 if (category === 'ALL') {
                     productArr = await db.Products.findAll({
                         limit: limit,
@@ -54,7 +70,7 @@ let getAllProductByCategoryService = (category, limit) => {
                             { model: db.Allcodes, as: 'categoryData', attributes: ['valueEn', 'valueVn'] }
                         ],
                         order: [
-                            ['id', 'DESC'],
+                            ['category', 'ASC'],
                         ],
                     })
                 } else {
@@ -68,11 +84,22 @@ let getAllProductByCategoryService = (category, limit) => {
                 }
             }
             if (productArr.length > 0) {
-                resolve({
-                    errCode: 0,
-                    errMessage: "Fetch data success",
-                    data: productArr
-                })
+                if (limit == 0) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: "Fetch data success",
+                        // dataSlice: dataProduct,
+                        data: dataProduct,
+                        totalPages: totalPages,
+                    })
+                }
+                else if ((page == 0) || (itemsPerPage == 0)) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: "Fetch data success",
+                        data: productArr,
+                    })
+                }
             } else {
                 resolve({
                     errCode: 1,
@@ -86,33 +113,76 @@ let getAllProductByCategoryService = (category, limit) => {
     })
 }
 
-let getAllStoreByCityService = (city) => {
+let getAllStoreByCityService = (city, page, itemsPerPage, limit) => {
     return new Promise(async (resolve, reject) => {
         try {
             let storeArr = []
-            if (city === 'ALL') {
-                storeArr = await db.Stores.findAll({
-                    include: [
-                        { model: db.ImageStore, as: 'imageData' },
-                        { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
-                    ],
-                })
-            } else {
-                storeArr = await db.Stores.findAll({
-                    where: { cityId: city },
-                    include: [
-                        { model: db.ImageStore, as: 'imageData' },
-                        { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
-                    ],
-                })
-
+            let dataStore = [];
+            let totalPages = 0;
+            if (limit == 0) {
+                if (city === 'ALL') {
+                    storeArr = await db.Stores.findAll({
+                        include: [
+                            { model: db.ImageStore, as: 'imageData' },
+                            { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                        ],
+                    })
+                    // Pagination
+                    const startIndex = (page - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    dataStore = storeArr.slice(startIndex, endIndex);
+                    totalPages = Math.ceil(storeArr.length / itemsPerPage);
+                } else {
+                    storeArr = await db.Stores.findAll({
+                        where: { cityId: city },
+                        include: [
+                            { model: db.ImageStore, as: 'imageData' },
+                            { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                        ],
+                    })
+                    // Pagination
+                    const startIndex = (page - 1) * itemsPerPage;
+                    const endIndex = startIndex + itemsPerPage;
+                    dataStore = storeArr.slice(startIndex, endIndex);
+                    totalPages = Math.ceil(storeArr.length / itemsPerPage);
+                }
+            }
+            else if ((page == 0) || (itemsPerPage == 0)) {
+                if (city === 'ALL') {
+                    storeArr = await db.Stores.findAll({
+                        limit: limit,
+                        include: [
+                            { model: db.ImageStore, as: 'imageData' },
+                            { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                        ],
+                    })
+                } else {
+                    storeArr = await db.Stores.findAll({
+                        limit: limit,
+                        where: { cityId: city },
+                        include: [
+                            { model: db.ImageStore, as: 'imageData' },
+                            { model: db.Allcodes, as: 'cityData', attributes: ['valueEn', 'valueVn'] },
+                        ],
+                    })
+                }
             }
             if (storeArr.length > 0) {
-                resolve({
-                    errCode: 0,
-                    errMessage: "Fetch data success",
-                    data: storeArr
-                })
+                if (limit == 0) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: "Fetch data success",
+                        data: dataStore,
+                        totalPages: totalPages,
+                    })
+                }
+                else if ((page == 0) || (itemsPerPage == 0)) {
+                    resolve({
+                        errCode: 0,
+                        errMessage: "Fetch data success",
+                        data: storeArr,
+                    })
+                }
             } else {
                 resolve({
                     errCode: 1,
@@ -234,7 +304,7 @@ let getStatisticsAppService = () => {
         try {
             // count admin
             const totalAdmins = await db.Users.count({
-                where: { roleId: 'R1', isApproved: 1 }
+                where: { roleId: ['R1', 'R2'], isApproved: 1 }
             });
 
             // count product
