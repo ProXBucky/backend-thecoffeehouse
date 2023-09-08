@@ -246,6 +246,10 @@ let deleteOrderService = (id) => {
                     where: { id: id }
                 })
                 if (res) {
+                    await db.OrderDetail.destroy({
+                        where: { orderId: res.id }
+                    })
+                    await res.destroy()
                     resolve({
                         errCode: 0,
                         errMessage: 'Delete order success'
