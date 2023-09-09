@@ -46,7 +46,7 @@ let createNewAdminService = (body) => {
                     address: body.address,
                     roleId: 'R2', // role admin
                     phone: body.phone,
-                    isApproved: false
+                    isApproved: 0
                 })
                 resolve({
                     errCode: 0,

@@ -6,10 +6,6 @@ const orderController = require("../controllers/orderController.js")
 const jwt = require("jsonwebtoken")
 const db = require("../models/index.js")
 const bcrypt = require('bcrypt');
-// const multer = require('multer');
-// const upload = multer({ dest: 'uploads/' });
-
-
 
 const router = express.Router()
 

@@ -2,13 +2,13 @@ import express from 'express'
 import connectDB from "./config/connectDB.mjs"
 import viewConfig from "./config/viewEngine.mjs"
 import bodyParser from 'body-parser'
-import dotenv from "dotenv"
 import initWebRoutes from './routes/route.cjs'
 import livereload from "livereload"
 import connectLiveReload from "connect-livereload"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary';
+import dotenv from "dotenv"
 dotenv.config()
 
 

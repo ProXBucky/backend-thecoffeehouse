@@ -15,7 +15,7 @@ let getAllAdminService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allAdmin = await db.Users.findAll({
-                where: { roleId: ['R1', 'R2'], isApproved: true },
+                where: { roleId: ['R1', 'R2'], isApproved: 1 },
                 order: [
                     ['roleId', 'ASC'],
                 ],
@@ -47,7 +47,7 @@ let getAllAdminNotApprovedService = () => {
     return new Promise(async (resolve, reject) => {
         try {
             const allAdmin = await db.Users.findAll({
-                where: { roleId: 'R2', isApproved: false }
+                where: { roleId: 'R2', isApproved: 0 }
             })
             if (allAdmin.length <= 0) {
                 resolve({
@@ -76,7 +76,7 @@ let approveAdminByIdService = (id) => {
                 where: { id: id }
             })
             if (admin) {
-                admin.isApproved = true
+                admin.isApproved = 1
                 await admin.save();
                 resolve({
                     errCode: 0,
