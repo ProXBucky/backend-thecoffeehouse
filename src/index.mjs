@@ -3,8 +3,8 @@ import connectDB from "./config/connectDB.mjs"
 import viewConfig from "./config/viewEngine.mjs"
 import bodyParser from 'body-parser'
 import initWebRoutes from './routes/route.cjs'
-import livereload from "livereload"
-import connectLiveReload from "connect-livereload"
+// import livereload from "livereload"
+// import connectLiveReload from "connect-livereload"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary';
@@ -13,18 +13,20 @@ dotenv.config()
 
 
 //auto load server when optimize
-const liveReloadServer = livereload.createServer();
-liveReloadServer.server.once("connection", () => {
-    setTimeout(() => {
-        liveReloadServer.refresh("/");
-    }, 100);
-});
+// const liveReloadServer = livereload.createServer();
+// liveReloadServer.server.once("connection", () => {
+//     setTimeout(() => {
+//         liveReloadServer.refresh("/");
+//     }, 100);
+// });
 
 let app = express()
-const env = process.env.NODE_ENV || "development";
-if (env === "development") {
-    app.use(connectLiveReload());
-}
+
+// const env = process.env.NODE_ENV || "development";
+
+// if (env === "development") {
+//     app.use(connectLiveReload());
+// }
 
 
 app.use(bodyParser.json({ limit: '50mb' }));
