@@ -92,13 +92,13 @@ function initWebRoutes(app) {
             if (user && user.password) {
                 const checkPassword = bcrypt.compareSync(req.body.password, user.password)
                 if (checkPassword === true) {
-                    if (user.isApproved === false) {
+                    if (user.isApproved === 0) {
                         res.status(200).json({
                             errCode: 4,
                             errMessage: 'Account is not approved by admin',
                         })
                     }
-                    else if (user.isApproved === true) {
+                    else if (user.isApproved === 1) {
                         let accessToken = jwt.sign(
                             { id: user.id, roleId: user.roleId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 60 * 60 }
                         );

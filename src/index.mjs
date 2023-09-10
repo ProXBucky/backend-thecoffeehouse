@@ -3,38 +3,30 @@ import connectDB from "./config/connectDB.mjs"
 import viewConfig from "./config/viewEngine.mjs"
 import bodyParser from 'body-parser'
 import initWebRoutes from './routes/route.cjs'
-// import livereload from "livereload"
-// import connectLiveReload from "connect-livereload"
 import cors from "cors"
 import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from "dotenv"
 dotenv.config()
-
-
-//auto load server when optimize
-// const liveReloadServer = livereload.createServer();
-// liveReloadServer.server.once("connection", () => {
-//     setTimeout(() => {
-//         liveReloadServer.refresh("/");
-//     }, 100);
-// });
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let app = express()
 
-// const env = process.env.NODE_ENV || "development";
+// Serve static assets (e.g., CSS, JavaScript)
+app.use(express.static(path.join(__dirname, 'build')));
 
-// if (env === "development") {
-//     app.use(connectLiveReload());
-// }
-
+// Handle all routes by serving the main index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 100000, }));
 app.use(cookieParser());
 app.use(cors())
-
-
 
 // Cấu hình kết nối Cloudinary
 cloudinary.config({
@@ -46,7 +38,6 @@ cloudinary.config({
 // Kết nối Routes
 initWebRoutes(app)
 viewConfig(app)
-
 //Kết nối database
 connectDB()
 

@@ -502,7 +502,7 @@ let createNewManagerService = (body) => {
                     address: body.address,
                     roleId: 'R1', // role manager
                     phone: body.phone,
-                    isApproved: true
+                    isApproved: 1
                 })
                 resolve({
                     errCode: 0,
