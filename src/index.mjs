@@ -3,7 +3,7 @@ import connectDB from "./config/connectDB.mjs"
 import viewConfig from "./config/viewEngine.mjs"
 import bodyParser from 'body-parser'
 import initWebRoutes from './routes/route.cjs'
-// import cors from "cors"
+import cors from "cors"
 import cookieParser from 'cookie-parser'
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from "dotenv"
@@ -15,20 +15,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 let app = express()
 
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', process.env.REACT_PORT);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-});
-
-// // Serve static assets (e.g., CSS, JavaScript)
-// app.use(express.static(path.join(__dirname, 'build')));
-// // Handle all routes by serving the main index.html
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join('build', 'index.html'));
+// app.use(function (req, res, next) {
+//     res.setHeader('Access-Control-Allow-Origin', process.env.REACT_PORT);
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     next();
 // });
+app.use(cors({
+    origin: process.env.REACT_PORT, // Đặt nguồn (origin) cụ thể mà bạn muốn cho phép
+    methods: 'GET,POST,PUT,DELETE', // Các phương thức được phép
+    allowedHeaders: 'Content-Type', // Các tiêu đề được phép
+    credentials: true, // Cho phép gửi cookie và header xác thực
+}));
+
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
