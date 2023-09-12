@@ -23,7 +23,7 @@ app.use(_express.default.static(_path.default.join(_dirname, 'build')));
 
 // Handle all routes by serving the main index.html
 app.get('*', (req, res) => {
-  res.sendFile(_path.default.join(_dirname, 'build', 'index.html'));
+  res.sendFile(_path.default.join(_dirname, 'build', 'src/index.html'));
 });
 app.use(_bodyParser.default.json({
   limit: '50mb'
@@ -34,7 +34,13 @@ app.use(_bodyParser.default.urlencoded({
   parameterLimit: 100000
 }));
 app.use((0, _cookieParser.default)());
-app.use((0, _cors.default)());
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 // Cấu hình kết nối Cloudinary
 _cloudinary.v2.config({
