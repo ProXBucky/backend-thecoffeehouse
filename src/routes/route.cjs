@@ -83,7 +83,7 @@ function initWebRoutes(app) {
         if (await checkEmailExist(req.body.email) === false) {
             res.status(200).json({
                 errCode: 1,
-                errMessage: 'User is not exist, please register new account',
+                errMessage: 'Tài khoản đã tồn tại, hãy nhập email khác',
             })
         } else {
             let user = await db.Users.findOne({
@@ -95,7 +95,7 @@ function initWebRoutes(app) {
                     if (user.isApproved === 0) {
                         res.status(200).json({
                             errCode: 4,
-                            errMessage: 'Account is not approved by admin',
+                            errMessage: 'Tài khoản chưa được duyệt',
                         })
                     }
                     else if (user.isApproved === 1) {
@@ -104,7 +104,7 @@ function initWebRoutes(app) {
                         );
                         res.status(200).json({
                             errCode: 0,
-                            errMessage: 'Login success',
+                            errMessage: 'Đăng nhập thành công',
                             accessToken,
                             email: user.email
                         })
@@ -112,13 +112,13 @@ function initWebRoutes(app) {
                 } else {
                     res.status(200).json({
                         errCode: 2,
-                        errMessage: 'Password is wrong',
+                        errMessage: 'Sai mật khẩu',
                     })
                 }
             } else {
                 res.status(200).json({
                     errCode: 3,
-                    errMessage: 'You are not manager or admin',
+                    errMessage: 'Bạn không phải nhân viên',
                 })
             }
         }
