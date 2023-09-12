@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         address: DataTypes.STRING,
         phone: DataTypes.STRING,
         roleId: DataTypes.STRING,
-        isApproved: DataTypes.BOOLEAN
+        isApproved: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Users',
