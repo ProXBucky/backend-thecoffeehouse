@@ -20,8 +20,9 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 // Handle all routes by serving the main index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
+
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 100000, }));
