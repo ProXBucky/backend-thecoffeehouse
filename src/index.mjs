@@ -23,12 +23,12 @@ app.use(function (req, res, next) {
     next();
 });
 
-// Serve static assets (e.g., CSS, JavaScript)
-app.use(express.static(path.join(__dirname, 'build')));
-// Handle all routes by serving the main index.html
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// // Serve static assets (e.g., CSS, JavaScript)
+// app.use(express.static(path.join(__dirname, 'build')));
+// // Handle all routes by serving the main index.html
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join('build', 'index.html'));
+// });
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
