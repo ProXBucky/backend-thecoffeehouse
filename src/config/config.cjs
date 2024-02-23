@@ -9,7 +9,7 @@ module.exports =
     "database": process.env.DB_DATABASE_NAME,
     "host": process.env.DB_HOST,
     "port": process.env.DB_PORT,
-    "dialect": 'postgres',
+    "dialect": process.env.DB,
     "logging": false,
     "define": {
       "freezeTableName": true
@@ -40,3 +40,4 @@ module.exports =
     "dialect": "mysql"
   }
 }
+

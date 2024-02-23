@@ -199,6 +199,8 @@ let updateAdminDataService = (body) => {
 let createNewProductSevice = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const maxId = await db.Products.max('id'); // Tìm ID lớn nhất trong bảng Users
+            const newId = (maxId !== null) ? maxId + 1 : 1; // Tính toán ID mới
             if (!body) {
                 resolve({
                     errCode: 1,
@@ -211,6 +213,7 @@ let createNewProductSevice = (body) => {
 
             // Lưu đường dẫn va cloudID vào cơ sở dữ liệu bằng Sequelize
             await db.Products.create({
+                id: newId,
                 name: body.name,
                 originalPrice: body.originalPrice,
                 category: body.category,
@@ -312,7 +315,10 @@ let updateProductDataService = (body) => {
 let createNewStoreService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const maxId = await db.Stores.max('id'); // Tìm ID lớn nhất trong bảng Users
+            const newId = (maxId !== null) ? maxId + 1 : 1; // Tính toán ID mới
             const store = await db.Stores.create({
+                id: newId,
                 nameStore: body.nameStore,
                 address: body.address,
                 description: body.description,
@@ -488,6 +494,8 @@ let checkEmailExist = (emailNew) => {
 let createNewManagerService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const maxId = await db.Users.max('id'); // Tìm ID lớn nhất trong bảng Users
+            const newId = (maxId !== null) ? maxId + 1 : 1; // Tính toán ID mới
             if (await checkEmailExist(body.email)) {
                 resolve({
                     errCode: 1,
@@ -495,6 +503,7 @@ let createNewManagerService = (body) => {
                 })
             } else {
                 await db.Users.create({
+                    id: newId,
                     email: body.email,
                     password: hashPassword(body.password),
                     firstName: body.firstName,

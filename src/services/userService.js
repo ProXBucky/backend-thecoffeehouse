@@ -32,6 +32,8 @@ let checkEmailExist = (emailNew) => {
 let createNewAdminService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const maxId = await db.Users.max('id'); // Tìm ID lớn nhất trong bảng Users
+            const newId = (maxId !== null) ? maxId + 1 : 1; // Tính toán ID mới
             if (await checkEmailExist(body.email)) {
                 resolve({
                     errCode: 1,
@@ -39,6 +41,7 @@ let createNewAdminService = (body) => {
                 })
             } else {
                 await db.Users.create({
+                    id: newId,
                     email: body.email,
                     password: hashPassword(body.password),
                     firstName: body.firstName,

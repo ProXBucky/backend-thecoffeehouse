@@ -3,10 +3,13 @@ const db = require("../models/index.js")
 let orderProductService = (body) => {
     return new Promise(async (resolve, reject) => {
         try {
+            const maxId = await db.Users.max('id'); // Tìm ID lớn nhất trong bảng Users
+            const newId = (maxId !== null) ? maxId + 1 : 1; // Tính toán ID mới
             if (body.cart || body.cartItems || body.cartTotalAmount) {
                 const [user] = await db.Users.findOrCreate({
                     where: { email: body.email },
                     defaults: {
+                        id: newId,
                         email: body.email,
                         firstName: body.firstName,
                         lastName: body.lastName,
